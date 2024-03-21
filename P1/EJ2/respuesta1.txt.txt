@@ -1,0 +1,1 @@
+Tras un meticuloso análisis del microprocesador RISC-V en su versión uniciclo y el conjunto de instrucciones proporcionado, que comprende las instrucciones "add", "addi", "and", "andi", "auipc", "beq", "bne", "j", "jal", "jalr", "li", "lw", "lui", "sw" y "xor", se puede afirmar con certeza que las instrucciones están soportadas.

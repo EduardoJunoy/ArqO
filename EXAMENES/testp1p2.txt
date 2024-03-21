@@ -1,0 +1,307 @@
+HAY DOS MAL
+
+PREGUNTA 1
+La unidad de detección de riesgos (hazard detection unit) en la versión segmentada implementada durante la práctica 2 tiene por objetivos: (seleccione la respuesta que corresponde).
+
+Seleccione una:
+a. (CORRECTA?) Se utiliza para detectar la situación que una instrucción utiliza un dato como operando fuente y este es generado por una instrucción de carga de memoria LOAD que está inmediatamente por delante en el pipeline. La acción requerida es detener el pipeline y generar una burbuja.
+La detección de la situación se realiza en la etapa de decodificación (ID), por tanto, la instrucción LOAD estará en EX. ID/EX.MemRead and ((ID/EX.RegisterRd = IF/ID.RegisterRs1) or (ID/EX.RegisterRd = IF/ID.RegisterRs2)) En el siguiente ciclo de reloj al riesgo, la instrucción LOAD estará en MEM y en EX habrá una burbuja.
+
+b. La unidad debe actuar en la etapa de captura (IF) y/o decodificación (ID). De forma combinacional detecta si hay datos en caché. En ese caso adelanta los datos directamente a las etapas EX, MEM y WB. Con esto se evitan burbujas incensarías en el pipeline. Esta es la condición. Si (EX/MEM.RegWrite and (EX/MEM.RegisterRd ≠ 0) and (EX/MEM.RegisterRd = ID/EX.RegisterRs1)) Luego el procesador funciona a mayor frecuencia de reloj.
+
+c. Se utiliza para detectar la situación que se da cuando una instrucción utiliza un dato como operando fuente y este es generado por una instrucción de carga de memoria LOAD que está inmediatamente por detrás. La acción requerida es detener pipeline y generar nueva dirección en el contador de programa (PC). La detección de la situación se realiza en la etapa de acceso a memoria (MEM), por tanto, la instrucción LOAD estará en la etapa de captura (IF). ID/EX.MemRead and ((ID/EX.RegisterRd = IF/ID.RegisterRs1) or (ID/EX.RegisterRd = IF/ID.RegisterRs2)) En el siguiente ciclo de reloj, la instrucción LOAD grabará el resultado en el banco de registros.
+
+d. La unidad debe actuar en la etapa de ejecución (EX). De forma combinacional detecta la necesidad de adelantar datos desde las etapas MEM y WB. Esta es la condición: Si (EX/MEM.RegWrite and (EX/MEM.RegisterRd ≠ 0) and (EX/MEM.RegisterRd = ID/EX.RegisterRs1)) Entonces adelantar el operando A (ForwardA). De esta manera en la etapa EX se utiliza el dato presente en la etapa MEM en vez de lo leído en el banco de registros
+
+e. La unidad de detección de riesgos (hazard detection unit) es completamente opcional. El procesador funciona perfectamente sin esta unidad. El objetivo de la unidad es el aumento del rendimiento haciendo que el CPI (ciclos por instrucción) sea mayor que 1.  
+De esta manera al detectar ((ID/EX.RegisterRt = IF/ID.RegisterRs) or (ID/EX.RegisterRt = IF/ID.RegisterRt)) ejecuta dos operaciones en paralelo.
+La unidad de detección de riesgos (hazard detection unit) en un procesador segmentado (pipeline) tiene la función de identificar y resolver situaciones en las que las instrucciones dependen de los resultados de otras instrucciones que aún no se han completado. Estos riesgos pueden incluir riesgos de datos, de control y estructurales.
+
+PREGUNTA 2
+Respecto a la simulación y verificación del correcto funcionamiento del procesador RISC-V desarrollado en las prácticas, seleccione la aseveración correcta.
+eleccione una:
+a. Se utiliza Xilinx ISE. Para ejecutar el programa se lanza desde lineas de comandos. Tras crear un proyecto en ISE, este genera un fichero de script tcl que se puede usar para poder simular. El testbech provisto se encarga de compilar el codigo ensamblador y cargarlo en la memoria del programa. El script tcl llama al emulador RARS para verificar los resultados.
+b. Se simula con un simulador RTL (Modelsim, QuestaSim, VivadoSimulator, etc). El tesbench instancia el procesador y la memoria unificada. Existe una única memoria a la que se conecta al procesador diseñado. El contenido de esta memoria es un fichero escrito en ensamblador de RISC-V. El testbench genera la señal de reloj y un pulso de reset y ejecuta hasta que detecta una instrucción "stop" en el código ensamblador.
+c. Se simula con cualquier compilador de C/C++ (GCC, Clang, Visual C++, etc). El tesbench instancia el procesador y dos memorias. Una será la memoria de datos de primer nivel y la otra la de segundo nivel, conectándose ambas al procesador diseñado. El contenido de cada memoria se carga desde un fichero formato Excel separado. El contenido de estos ficheros se genera compilando el ensamblador ya sea usando RARS o el compilador provisto desde la asignatura. El testbench solo genera la señal de reloj, el resto es por línea de comandos.
+d. (CORRECTA?) Se simula con un simulador RTL (Modelsim, QuestaSim, VivadoSimulator, etc). El tesbench instancia el procesador y dos memorias. Una será la memoria de datos y la otra la de instrucciones, conectándose ambas al procesador diseñado. El contenido de cada memoria se carga desde un fichero de texto separado. El contenido de estos ficheros de texto se genera compilando el ensamblador, usando el emulador RARS. El testbench solo genera la señal de reloj y un pulso de reset al comienzo y ejecuta durante una cantidad configurable de ciclos.
+e. Se utiliza VirtualBox o VMWare. Se carga la máquina Virtual MV con el procesador a simular. Se ven las formas de ondas en cualquier navegador web que ejecute en Windows o Linux. El programa en ensamblador se tras-compila en el tesbench provisto por la asignatura. La MV se puede generar desde RARS o Modelsim.
+La simulación de un procesador RISC-V desarrollado en VHDL generalmente se realiza utilizando un simulador RTL como Modelsim, QuestaSim o VivadoSimulator. Estos simuladores permiten observar el comportamiento del diseño a nivel de registro-transfer (RTL), lo cual es crucial para verificar el correcto funcionamiento del procesador.
+
+PREGUNTA 3
+La memoria de instrucciones utilizada en la implementación del procesador segmentado en la P1 y P2, con el objetivo de alcanzar el mejor valor de CPI, funciona de la siguiente forma:
+a.Funciona con lectura y escritura síncrona, requiere 2 ciclos.
+b.Es combinacional en lectura y escritura.
+c.Funciona con lectura y escritura síncrona, requiere 3 ciclos.
+d.Funciona con lectura síncrona (2 ciclos) y escritura combinacional.
+e.(CORRECTA?) Es combinacional en lectura.
+
+Para obtener el mejor valor de CPI (Ciclos Por Instrucción) en un procesador segmentado, es ideal que la memoria de instrucciones sea lo más rápida posible. Esto generalmente significa que las lecturas (y posiblemente las escrituras, aunque en la mayoría de los procesadores las instrucciones no se escriben en tiempo de ejecución) deberían ser combinacionales, es decir, que el tiempo de acceso sea lo más corto posible.
+
+PREGUNTA 4
+¿Cuál es la descripción correcta para un Registro Flip-Flop tipo D con reset asincrono activo alto (reset), con señal de habilitación (ce) activa alta y reloj activo en flanco ascendente (clock) ? Este registro se usa para modelar el registro PC (program counter) de microprocesador
+
+Seleccione una:
+a.
+PC_reg_proc: process(Clk, Reset, we)
+begin
+  if Reset = '1' then
+     PC_reg <= (others => '0');
+  elsif falling_edge(Clk) then
+     if we = '0' then
+        PC_reg <= PC_next;
+     end if;
+  end if;
+end process;
+
+b. (CORRECTA?)
+PC_reg_proc: process(Clk, Reset)
+begin
+  if Reset = '1' then
+     PC <= (others => '0');
+  elsif rising_edge(Clk) then
+     if we = '1' then
+        PC <= PC_next;
+     end if;
+  end if;
+end process;
+
+c.
+PC_reg_proc: process(Clk)
+begin
+  if rising_edge(Clk) then
+     if Reset = '1' then
+        PC_reg <= (others => '0');
+     elsif we = '1' then
+        PC_reg <= PC_next;
+     end if;
+  end if;
+end process;
+
+d.
+PC_reg_proc: process(Clk, Reset)
+begin
+  if Reset = '1' then
+     PC_reg <= (others => '0');
+  elsif falling_edge(Clk) then
+     if we = '1' then
+        PC_reg <= PC_next;
+     end if;
+  end if;
+end process;
+
+e.
+PC_reg_proc: process(we)
+begin
+  if Reset = '1' then
+     PC <= (others => '0');
+  elsif rising_edge(Clk) then
+     if we = '1' then
+        PC <= PC_next;
+     end if;
+  end if;
+end process;
+
+PREGUNTA 5
+Respecto del banco de Registros provisto por la asignatura en el procesador RISC-V y modificado en la P2.
+Seleccione una:
+a.Se lee y escribe de forma combinacional en flanco de subida. La modificación en la Práctica 2 lo hace todo secuencial en flanco de bajada para que se adelanten datos de WB a ID.
+
+b. (CORRECTA?) Se lee de forma combinacional y escribe en flanco de subida. La modificación en la Práctica 2 permite que se adelanten datos de WB a ID.
+
+c.Se lee con flanco de bajada y escribe en flanco de subida. Se modifica el banco de registros en Práctica 2 para producir el adelantamiento de MEM a EX.
+
+d.El banco de registro lo hemos tenido que diseñar para evitar los riesgos RAW (Data Hazards), adelantando datos de las etapas MEM y WB a EX.
+
+e.Se lee de forma combinacional y escribe en flanco de bajada. No se requiere modificar el banco de registros en Práctica 2, el adelantamiento de MEM a EX está ya resuelto.
+
+PREGUNTA 6
+Seleccione debajo la opción que más se ajuste en RISC a la implementación de la instrucción AND.
+Seleccione una:
+
+a.La unidad de  control en la etapa ID no necesita reconocer el código de operación, ya que ya está incluido en las instrucciones tipo-R. El módulo alu_control no usará ls campos func3 y func7 para determinar la operación efectiva en la ALU. En la etapa EX el 1er operando proviene del registro Rs1, el 2do operando surge de los 16 bits de menor peso de la instrucción extendido con signo a 32 bits. En la etapa WB se escribe en el registro destino de la instrucción (Rd).
+b.La unidad de control de la etapa ID deberá reconocer este código de operación. El módulo alu_control usa la info de la decodificación para determinar la operación efectiva en la ALU. En la etapa EX el 1er operando proviene del registro Rs2, el 2do operando surge de los 16 bits de mayor peso de la instrucción extendido con signo a 32 bits. En la etapa MEM la instrucción no realiza nada, en la etapa WB se escribe en el registro destino de la instrucción (Rs1).
+
+c.La unidad de control de la etapa ID deberá reconocer este código de operación. El módulo alu_control usa la info de la decodificación para determinar la operación efectiva en la ALU. En la etapa EX el 1er operando proviene del registro Rd, el 2do operando del registro Rs2. En la etapa MEM la instrucción accede al operando en memoria, en la etapa WB se escribe en el registro destino de la instrucción (Rs1).
+
+d.(CORRECTA?) La unidad de control en la etapa ID no necesita reconocer exactamente esta instrucción, tan solo que es una instrucción tipo-R. El módulo alu_control revisará los campos func3 y func7 para determinar la operación efectiva en la ALU.  En la etapa EX el 1er operando proviene del registro Rs1, el 2do operando de Rs2. En la etapa MEM la instrucción no realiza nada, en la etapa WB se escribe en el registro destino de la instrucción (Rd).
+
+e.La unidad de control de la etapa ID deberá reconocer esta instrucción. El módulo alu_control usa la info de la decodificación para determinar la operación efectiva en la ALU. En la etapa EX el 1er operando proviene del registro Rs1, el 2do operando del contenido  del registro Rs2. En la etapa MEM la instrucción no realiza nada, en la etapa WB se escribe en el registro destino de la instrucción (Rd).
+
+PREGUNTA 7
+El siguiente programa ensamblador quiere probar la versión segmentada (pipelined) del RISC-V pipeline con soporte de riesgos de datos.
+
+      lw   t1, 0(t0)      # En x6 lo apuntado por x5
+      lw   t2, 4(t0)      # En x7 lo apuntado por x5 + 4
+      lw   t3, 8(t0)      # En x28 lo apuntado por x5 + 8
+      nop
+      nop
+      nop
+      add  a1, t2, t1    # En x11, x6 + x7
+      add  a2, t3, a1    # En x12, x28 + x11
+ 
+Seleccione una:
+a.El código permite detectar un mal funcionamiento en el adelantamiento (forwarding) desde la etapa MEM. Pero no permitirá detectar problemas con adelantamientos desde WB. El código no prueba el funcionamiento de la unidad de detección de riesgos LOAD-USE (hazard detection unit).
+
+b.El código permite detectar un mal funcionamiento en el adelantamiento debido a riegos de tipo WAR (Write After Read) y WAW (Write After Write). Es imposible detectar riesgos de tipo RAW (Read After Write) con este código.
+
+c.(CORRECTA?)El código permite detectar un mal funcionamiento en el adelantamiento desde la etapa MEM y/o WB. El código prueba el funcionamiento de la unidad de detección de riesgos (hazard detection unit), es decir LOAD - USE, tras el LW y correspondiente uso del dato leído.
+
+d.El código permite detectar un mal funcionamiento en el adelantamiento desde la etapa WB. Pero no permitirá detectar problemas con adelantamientos desde MEM. El código prueba el funcionamiento de la unidad de detección de riesgos (hazard detection unit), es decir LOAD (LW) antes del uso del dato.
+
+e.El código prueba el funcionamiento de la unidad de detección de riesgos (hazard detection unit), es decir LOAD (LW) y posterior uso del dato. Este código no permite detectar problemas de adelantamiento de datos de ningún tipo.
+
+PREGUNTA 8
+Seleccione debajo la opción que más se ajuste a la implementación de la instrucción XORI.
+Seleccione una:
+a.La unidad de control en la etapa ID no necesita reconocer el código de operación, ya que ya está incluido en las instrucciones tipo-R. En la etapa EX el 1er operando proviene del registro rs1, el 2do operando surge de los 16 bits de menor peso de la instrucción extendido con signo a 32 bits. En la etapa MEM la instrucción no realiza nada, en la etapa WB se escribe en el registro destino de la instrucción (rd).
+b.La unidad de control en la etapa ID no necesita reconocer el código de operación, ya que ya está incluido en las instrucciones tipo-R. En la etapa EX el 1er operando proviene del registro rd, el 2do operando del registro rs2. En la etapa MEM la instrucción no realiza nada, en la etapa WB se escribe en el registro destino de la instrucción (rs1).
+
+c.(CORRECTA?)La unidad de control de la ALU de la etapa EX debe usar funct3 para determinar la operación de la ALU. En la etapa EX el 1er operando proviene del registro rs1, el 2do operando surge de los 12 bits de mayor peso de la instrucción extendido con signo. En la etapa MEM la instrucción no realiza nada, en la etapa WB se escribe en el registro destino de la instrucción (rd).
+
+d.La unidad de control de la etapa ID deberá reconocer este código de operación. En la etapa EX el 1er operando proviene del registro rs2, el 2do operando surge de los 16 bits de mayor peso de la instrucción extendido con signo a 32 bits. En la etapa MEM la instrucción no realiza nada, en la etapa WB se escribe en el registro destino de la instrucción (rs1).
+
+e.La unidad de control de la etapa ID deberá reconocer este código de operación. En la etapa EX el 1er operando proviene del registro rs1, el 2do operando del contenido  del registro rs2. En la etapa MEM la instrucción no realiza nada, en la etapa WB se escribe en el registro destino de la instrucción (rd).
+
+PREGUNTA 9
+Se han modelado en VHDL los registros IF/ID del procesador RISC-V segmentado implementado en la Práctica 2. Los registros unen la etapa IF (Instruction Fetching) y la etapa ID (Instruction Decode). La semántica de las señales es la siguiente:
+
+Reset: es el reset asíncrono global del sistema, activo a nivel alto.
+Clear_ID: señal de reset síncrona activa en nivel alto utilizada para eliminar la instrucción de la etapa de decodificación (ID), usada en los saltos.
+Write_IFID: señal de habilitación, utilizada para bloquear una instrucción cuando es necesario agregar una burbuja. Activa a nivel alto.
+Instr_IF: señal que contiene la instrucción leída desde la memoria de instrucciones en la etapa IF.
+PC_plus4_IF: señal que contiene el contador de programa (PC), sumándole 4. Es decir, la dirección de la siguiente instrucción.
+
+Señale el código correcto.
+Seleccione una:
+a.
+regs_IF/ID: process(Clk; Reset; Clear_ID; Write_IFID)
+
+begin
+   if Reset = '1' then
+      PC_plus4_ID := (others => '0');
+      Instr_ID    := (others => '0');
+   elsif rising_edge(Clk) then
+      if Clear_ID = '1' then
+         PC_plus4_ID <= (others => '0');
+         Instr_ID    <= (others => '0');
+      elsif Write_IFID = '1' then
+         PC_plus4_ID <= PCPlus_IF;
+         Instr_ID    <= Instr_IF;
+      end if;
+    end if;
+end process;
+
+b.
+regs_IF/ID: process(Reset; Clear_ID; Write_IFID)
+
+begin
+   if Reset <= '1' then
+      PC_plus4_ID := (others => '0');
+      Instr_ID    := (others => '0');
+   elsif rising_edge(Clk) then
+      if Clear_ID <= '1' then
+         PC_plus4_ID <= (others => '0');
+         Instr_ID    <= (others => '0');
+      elsif Write_IFID => '1' then
+         PC_plus4_ID <= PC_plus4_IF;
+         Instr_ID    <= Instr_IF;
+      end if;
+    end if;
+end process;
+
+c.
+regs_IF_ID: process(Write_IFID , Reset)
+
+begin
+   if Reset = '1' then
+      PC_plus4_ID <= (others => '0');
+      Instr_ID    <= (others => '0');
+   elsif rising_edge(Clk) then
+      if Write_IFID = '1' then
+         PC_plus4_ID <= PC_plus4_IF;
+         Instr_ID    <= Instr_IF;
+      end if;
+    end if;
+end process;
+
+d. (CORRECTA?)
+regs_IF_ID: process(Clk, Reset)
+begin
+   if Reset = '1' then
+      PC_plus4_ID <= (others => '0');
+      Instr_ID    <= (others => '0');
+   elsif rising_edge(Clk) then
+      if Clear_ID = '1' then
+         PC_plus4_ID <= (others => '0');
+         Instr_ID    <= (others => '0');
+      elsif Write_IFID = '1' then
+         PC_plus4_ID <= PC_plus4_IF;
+         Instr_ID    <= Instr_IF;
+      end if;
+    end if;
+end process;
+
+e.
+regs_IF_ID: process(Clk, Reset)
+
+begin
+   if Reset = '1' then
+      PC_plus4_ID <= (others => '0');
+      Instr_ID    <= (others => '0');
+   elsif rising_edge(Clk) then
+      if Clear_ID = '1' or Write_IFID = '1' then
+         PC_plus4_ID <= (others => '0');
+         Instr_ID    <= (others => '0');
+      else
+         PC_plus4_ID <= PC_plus4_IF;
+         Instr_ID    <= Instr_IF;
+      end if;
+    end if;
+end process;
+
+PREGUNTA 10
+La unidad de adelantamiento de datos (forwarding unit) detecta la necesidad de adelantar datos y modifica las señales de control a los multiplexores de entrada a la ALU. Seleccione la respuesta correcta.
+Seleccione una:
+
+a.La unidad de adelantamiento se coloca en la etapa de decodificación (ID) o en la de ejecución (EX). De forma secuencial usando una máquina de estados detecta la necesidad de adelantar datos que han sido generados en la etapa de captura (IF) o la de escritura (WB). Estas son las condiciones para tener que adelantar datos
+1. Hay necesidad de adelantar el dato desde la etapa MEM:
+Si (IF/MEM.RegWrite and (IF/MEM.RegisterRd ≠ 0) and (IF/MEM.RegisterRd = IF/EX.RegisterRs1)) Entonces adelantar el operando A (ForwardA) y
+Si (IF/MEM.RegWrite and (IF/MEM.RegisterRd ≠ 0) and (IF/MEM.RegisterRd = IF/EX.RegisterRs2)) Entonces adelantar el operando B (ForwardB)
+2. Es necesario adelantar datos desde la etapa WB:
+Si (IF/WB.RegWrite and (IF/WB.RegisterRd ≠ 0)  and not (IF/MEM.RegWrite and (IF/MEM.RegisterRd ≠ 0) and (IF/MEM.RegisterRd = ID/EX.RegisterRs1))  and (IF/WB.RegisterRd = ID/EX.RegisterRs1))  Entonces adelantar el operando A (ForwardA) y
+Si (IF/WB.RegWrite and (IF/WB.RegisterRd ≠ 0) and not (IF/MEM.RegWrite and (IF/MEM.RegisterRd ≠ 0)
+     and (IF/MEM.RegisterRd = IF/EX.RegisterRs2)) and (IF/WB.RegisterRd = IF/EX.RegisterRs2))  Entonces adelantar el operando A (ForwardA)
+
+b.La unidad de adelantamiento se coloca en la etapa de acceso a meoria (MEM). De forma combinacional detecta la necesidad de adelantar datos desde las etapas MEM y/o WB. Estas son las condiciones
+1. Hay necesidad de adelantar el dato desde la etapa MEM:
+Si (EX/MEM.RegWrite and (EX/MEM.RegisterRd ≠ ID/EX.RegisterRs)) Entonces adelantar el operando A (ForwardA) y
+Si (EX/MEM.RegWrite and (EX/MEM.RegisterRd ≠ ID/EX.RegisterRt)) Entonces adelantar el operando B (ForwardB)
+2. Es necesario adelantar datos desde la etapa WB:
+Si (MEM/WB.RegWrite) and (EX/MEM.RegisterRd ≠  ID/EX.RegisterRs))  and (MEM/WB.RegisterRd ≠  ID/EX.RegisterRs1))
+Entonces adelantar el operando A (ForwardA) y
+Si (MEM/WB.RegWrite and (MEM/WB.RegisterRd ≠ 0) and (EX/MEM.RegisterRd ≠ ID/EX.RegisterRs2)) and (MEM/WB.RegisterRd ≠ ID/EX.RegisterRt))
+Entonces adelantar el operando B (ForwardB)
+
+c.La unidad de adelantamiento se coloca en la etapa de decodificación (ID). De forma combinacional detecta la necesidad de adelantar datos desde las etapas EX, MEM y WB. Estas son las condiciones
+1. Hay necesidad de adelantar el dato desde la etapa EX a ID:
+Si (EX/MEM.RegWrite and (EX/MEM.RegisterRd ≠ 0) and (EX/MEM.RegisterRd = ID/EX.RegisterRs)) Entonces adelantar el operando A (ForwardA) y
+Si (EX/MEM.RegWrite and (EX/MEM.RegisterRd ≠ 0) and (EX/MEM.RegisterRd = ID/EX.RegisterRt)) Entonces adelantar el operando B (ForwardB) 
+2. Es necesario adelantar datos desde la etapa WB a ID:
+Si (MEM/WB.RegWrite and (MEM/WB.RegisterRd ≠ 0)  and  not (EX/MEM.RegWrite and (EX/MEM.RegisterRd ≠ 0) and (EX/MEM.RegisterRd = ID/EX.RegisterRs))  and (MEM/WB.RegisterRd = ID/EX.RegisterRs))  Entonces adelantar el operando A (ForwardA) y
+Si (MEM/WB.RegWrite and (MEM/WB.RegisterRd ≠ 0) and  not (EX/MEM.RegWrite and (EX/MEM.RegisterRd ≠ 0) and (EX/MEM.RegisterRd = ID/EX.RegisterRt)) and (MEM/WB.RegisterRd = ID/EX.RegisterRt))  Entonces adelantar el operando B (ForwardB)
+
+d. (CORRECTA?) La unidad de adelantamiento se coloca en la etapa de ejecución (EX). De forma combinacional detecta la necesidad de adelantar datos desde las etapas MEM y/o WB. Estas son las condiciones
+1. Hay necesidad de adelantar el dato desde la etapa MEM:
+Si (EX/MEM.RegWrite and (EX/MEM.RegisterRd ≠ 0) and (EX/MEM.RegisterRd = ID/EX.RegisterRs1)) Entonces adelantar el operando A (ForwardA) y Si (EX/MEM.RegWrite and (EX/MEM.RegisterRd ≠ 0) and (EX/MEM.RegisterRd = ID/EX.RegisterRs2)) Entonces adelantar el operando B (ForwardB)
+2. Es necesario adelantar datos desde la etapa WB:
+Si (MEM/WB.RegWrite and (MEM/WB.RegisterRd ≠ 0)  and not (EX/MEM.RegWrite and (EX/MEM.RegisterRd ≠ 0) and (EX/MEM.RegisterRd = ID/EX.RegisterRs1))  and (MEM/WB.RegisterRd = ID/EX.RegisterRs1))  Entonces adelantar el operando A (ForwardA) y
+Si (MEM/WB.RegWrite and (MEM/WB.RegisterRd ≠ 0) and  not (EX/MEM.RegWrite and (EX/MEM.RegisterRd ≠ 0) and (EX/MEM.RegisterRd = ID/EX.RegisterRs2)) and (MEM/WB.RegisterRd = ID/EX.RegisterRs2)) Entonces adelantar el operando B (ForwardB)
+
+e.La unidad de adelantamiento se coloca en la etapa de ejecución (EX). De forma secuencial usando una máquina de estados (FSM) detecta la necesidad de adelantar datos desde las etapas MEM y/o WB. Estas son las condiciones
+1. Hay necesidad de adelantar el dato desde la etapa MEM a ID:
+Si (EX/MEM.RegWrite and (EX/MEM.RegisterRd ≠ 0) and (EX/MEM.RegisterRd = ID/EX.RegisterRs1)) Entonces adelantar el operando A (ForwardA) y
+Si (EX/MEM.RegWrite and (EX/MEM.RegisterRd ≠ 0) and (EX/MEM.RegisterRd = ID/EX.RegisterRs2)) Entonces adelantar el operando B (ForwardB)
+2. Es necesario adelantar datos desde la etapa WB a ID:
+Si (MEM/WB.RegWrite and (MEM/WB.RegisterRd ≠ 0)  and  not (EX/MEM.RegWrite and (EX/MEM.RegisterRd ≠ 0) and (EX/MEM.RegisterRd = ID/EX.RegisterRs1))  and (MEM/WB.RegisterRd = ID/EX.RegisterRs1))  Entonces adelantar el operando A (ForwardA) y
+Si (MEM/WB.RegWrite and (MEM/WB.RegisterRd ≠ 0) and not (EX/MEM.RegWrite and (EX/MEM.RegisterRd ≠ 0)
+     and (EX/MEM.RegisterRd = ID/EX.RegisterRs2)) and (MEM/WB.RegisterRd = ID/EX.RegisterRs2)) Entonces adelantar el operando B (ForwardB)
