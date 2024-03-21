@@ -1,6 +1,6 @@
-# AlgoryED
+# ArqO
 
-**Curso: 2022/2023**
+**Curso: 2023/2024**
 
 **Asignatura: Arquitectura de Ordenadores**
 
